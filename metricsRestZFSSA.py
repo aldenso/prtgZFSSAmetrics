@@ -3,7 +3,7 @@
 # @Author: Aldo Sotolongo
 # @Date:   2017-05-12 21:34:39
 # @Last Modified by:   aldenso
-# @Last Modified time: 2017-05-15 03:32:18
+# @Last Modified time: 2017-05-15 03:49:43
 # Description: PRTG script to get zfssa metrics
 # Usage: on additional parameters for sensor you can use:
 # --host <zfssa_ip> --username <username> --password <password>
@@ -179,9 +179,9 @@ def cpu():
                                  )
     except Exception:
         if channels.sensor_message == "OK":
-            channels.sensor_message = "| can't check cpu: {} |"
+            channels.sensor_message = "| can't check cpu |"
         else:
-            channels.sensor_message += "| can't check cpu: {} |"
+            channels.sensor_message += "| can't check cpu |"
 
 
 def nfs2():
@@ -205,9 +205,9 @@ def nfs2():
                                  )
     except Exception:
         if channels.sensor_message == "OK":
-            channels.sensor_message = "| can't check nfs2: {} |"
+            channels.sensor_message = "| can't check nfs2 |"
         else:
-            channels.sensor_message += "| can't check nfs2: {} |"
+            channels.sensor_message += "| can't check nfs2 |"
 
 
 def nfs3():
@@ -231,9 +231,9 @@ def nfs3():
                                  )
     except Exception:
         if channels.sensor_message == "OK":
-            channels.sensor_message = "| can't check nfs3: {} |"
+            channels.sensor_message = "| can't check nfs3 |"
         else:
-            channels.sensor_message += "| can't check nfs3: {} |"
+            channels.sensor_message += "| can't check nfs3 |"
 
 
 def nfs4():
@@ -257,9 +257,9 @@ def nfs4():
                                  )
     except Exception:
         if channels.sensor_message == "OK":
-            channels.sensor_message = "| can't check nfs4: {} |"
+            channels.sensor_message = "| can't check nfs4 |"
         else:
-            channels.sensor_message += "| can't check nfs4: {} |"
+            channels.sensor_message += "| can't check nfs4 |"
 
 
 def disk():
@@ -283,9 +283,9 @@ def disk():
                                  )
     except Exception:
         if channels.sensor_message == "OK":
-            channels.sensor_message = "| can't check disk: {} |"
+            channels.sensor_message = "| can't check disk |"
         else:
-            channels.sensor_message += "| can't check disk: {} |"
+            channels.sensor_message += "| can't check disk |"
 
 
 def fc():
@@ -309,9 +309,9 @@ def fc():
                                  )
     except Exception:
         if channels.sensor_message == "OK":
-            channels.sensor_message = "| can't check fc: {} |"
+            channels.sensor_message = "| can't check fc |"
         else:
-            channels.sensor_message += "| can't check fc: {} |"
+            channels.sensor_message += "| can't check fc |"
 
 
 def iscsi():
@@ -335,9 +335,9 @@ def iscsi():
                                  )
     except Exception:
         if channels.sensor_message == "OK":
-            channels.sensor_message = "| can't check iscsi: {} |"
+            channels.sensor_message = "| can't check iscsi |"
         else:
-            channels.sensor_message += "| can't check iscsi: {} |"
+            channels.sensor_message += "| can't check iscsi |"
 
 
 def smb():
@@ -361,9 +361,9 @@ def smb():
                                  )
     except Exception:
         if channels.sensor_message == "OK":
-            channels.sensor_message = "| can't check smb: {} |"
+            channels.sensor_message = "| can't check smb |"
         else:
-            channels.sensor_message += "| can't check smb: {} |"
+            channels.sensor_message += "| can't check smb |"
 
 
 def smb2():
@@ -387,9 +387,9 @@ def smb2():
                                  )
     except Exception:
         if channels.sensor_message == "OK":
-            channels.sensor_message = "| can't check smb2: {} |"
+            channels.sensor_message = "| can't check smb2 |"
         else:
-            channels.sensor_message += "| can't check smb2: {} |"
+            channels.sensor_message += "| can't check smb2 |"
 
 
 def nic():
@@ -413,9 +413,9 @@ def nic():
                                  )
     except Exception:
         if channels.sensor_message == "OK":
-            channels.sensor_message = "| can't check nic: {} |"
+            channels.sensor_message = "| can't check nic |"
         else:
-            channels.sensor_message += "| can't check nic: {} |"
+            channels.sensor_message += "| can't check nic |"
 
 
 ###############################################################################
