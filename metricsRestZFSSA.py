@@ -3,7 +3,7 @@
 # @Author: Aldo Sotolongo
 # @Date:   2017-05-12 21:34:39
 # @Last Modified by:   aldenso
-# @Last Modified time: 2017-05-15 03:23:15
+# @Last Modified time: 2017-05-15 03:32:18
 # Description: PRTG script to get zfssa metrics
 # Usage: on additional parameters for sensor you can use:
 # --host <zfssa_ip> --username <username> --password <password>
@@ -132,7 +132,7 @@ class AdvancedCustomSensorResult(CustomSensorResult):
         if custom_unit is not None and self.__is_customunit_valid(custom_unit):
             channel['CustomUnit'] = custom_unit
 
-        # Resave channel
+        # Re-save channel
         if primary_channel:
             self.channels[0] = channel
         else:
@@ -143,7 +143,7 @@ class AdvancedCustomSensorResult(CustomSensorResult):
 
         valid_unit = {
             "Ops/sec",
-            "Kylobytes/sec"
+            "Kilobytes/sec"
         }
 
         if unit in valid_unit:
@@ -409,7 +409,7 @@ def nic():
                                  limit_max_warning=MAXWARNNIC,
                                  limit_max_error=MAXERRORNIC,
                                  is_limit_mode=1,
-                                 custom_unit="Kylobytes/sec"
+                                 custom_unit="Kilobytes/sec"
                                  )
     except Exception:
         if channels.sensor_message == "OK":
