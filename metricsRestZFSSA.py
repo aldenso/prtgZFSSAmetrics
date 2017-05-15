@@ -3,7 +3,7 @@
 # @Author: Aldo Sotolongo
 # @Date:   2017-05-12 21:34:39
 # @Last Modified by:   aldenso
-# @Last Modified time: 2017-05-15 00:02:32
+# @Last Modified time: 2017-05-15 03:23:15
 # Description: PRTG script to get zfssa metrics
 # Usage: on additional parameters for sensor you can use:
 # --host <zfssa_ip> --username <username> --password <password>
@@ -11,11 +11,11 @@
 # --host <zfssa_ip> --username <username> --password <password> --include smb2,nfs2,iscsi
 
 import sys
-import requests
 import json
 import getopt
-from paepy.ChannelDefinition import CustomSensorResult
+import requests
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
+from paepy.ChannelDefinition import CustomSensorResult
 
 # to disable warning
 # InsecureRequestWarning: Unverified HTTPS request is being made.
@@ -88,9 +88,9 @@ MAXWARNNIC, MAXERRORNIC = 500000, 1000000
 
 ###############################################################################
 # Custom Sensor class.
-# Takes the CustomSensorResult class from paepy and adds additional parameters.
 ###############################################################################
 class AdvancedCustomSensorResult(CustomSensorResult):
+    """Extend CustomSensorResult to include additional parameters"""
     def add_channel(
             self,
             channel_name,
