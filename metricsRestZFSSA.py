@@ -3,7 +3,7 @@
 # @Author: Aldo Sotolongo
 # @Date:   2017-05-12 21:34:39
 # @Last Modified by:   aldenso
-# @Last Modified time: 2017-05-15 03:49:43
+# @Last Modified time: 2017-05-15 11:44:39
 # Description: PRTG script to get zfssa metrics
 # Usage: on additional parameters for sensor you can use:
 # --host <zfssa_ip> --username <username> --password <password>
@@ -69,6 +69,7 @@ ISCSIRES = "/analytics/v1/datasets/iscsi.ops/data?start=now&seconds=1"
 SMBRES = "/analytics/v1/datasets/smb.ops/data?start=now&seconds=1"
 SMB2RES = "/analytics/v1/datasets/smb2.ops/data?start=now&seconds=1"
 NICRES = "/analytics/v1/datasets/nic.kilobytes/data?start=now&seconds=1"
+ARCRES = "/analytics/v1/datasets/arc.hitratio/data?start=now&seconds=1"
 
 
 ###############################################################################
@@ -84,6 +85,7 @@ MAXWARNISCSI, MAXERRORISCSI = 6000, 8000
 MAXWARNSMB, MAXERRORSMB = 40000, 80000
 MAXWARNSMB2, MAXERRORSMB2 = 40000, 80000
 MAXWARNNIC, MAXERRORNIC = 500000, 1000000
+MINWARNARC, MINERRORARC = 80, 60
 
 
 ###############################################################################
@@ -418,6 +420,31 @@ def nic():
             channels.sensor_message += "| can't check nic |"
 
 
+def arc():
+    try:
+        req = requests.get(URL + ARCRES,
+                           auth=ZAUTH,
+                           verify=False,
+                           headers=HEADER,
+                           timeout=TIMEOUT)
+        j = json.loads(req.text)
+        req.close()
+        for data in j.values():
+            channels.add_channel(channel_name="ARC Hit radio",
+                                 value=data["data"]["value"],
+                                 is_float=False,
+                                 limit_min_warning=MINWARNARC,
+                                 limit_min_error=MINERRORARC,
+                                 is_limit_mode=1,
+                                 unit="Percent"
+                                 )
+    except Exception:
+        if channels.sensor_message == "OK":
+            channels.sensor_message = "| can't check ARC |"
+        else:
+            channels.sensor_message += "| can't check ARC |"
+
+
 ###############################################################################
 # Default list of enabled checks to run
 ###############################################################################
@@ -431,7 +458,8 @@ ENABLEDCHECKS = {
     "iscsi": iscsi,
     "smb": smb,
     "smb2": smb2,
-    "nic": nic
+    "nic": nic,
+    "arc": arc
 }
 
 

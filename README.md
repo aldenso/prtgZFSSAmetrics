@@ -43,3 +43,4 @@ In **Additional Parameters** tab, use some pattern like the next examples:
 * smb:smb.ops
 * smb2:smb2.ops
 * nic:nic.kilobytes
+* arc:arc.hitratio
