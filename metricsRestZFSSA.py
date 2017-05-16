@@ -3,7 +3,7 @@
 # @Author: Aldo Sotolongo
 # @Date:   2017-05-12 21:34:39
 # @Last Modified by:   aldenso
-# @Last Modified time: 2017-05-15 11:44:39
+# @Last Modified time: 2017-05-16 10:11:23
 # Description: PRTG script to get zfssa metrics
 # Usage: on additional parameters for sensor you can use:
 # --host <zfssa_ip> --username <username> --password <password>
@@ -70,7 +70,9 @@ SMBRES = "/analytics/v1/datasets/smb.ops/data?start=now&seconds=1"
 SMB2RES = "/analytics/v1/datasets/smb2.ops/data?start=now&seconds=1"
 NICRES = "/analytics/v1/datasets/nic.kilobytes/data?start=now&seconds=1"
 ARCRES = "/analytics/v1/datasets/arc.hitratio/data?start=now&seconds=1"
-
+HTTPRES = "/analytics/v1/datasets/http.reqs/data?start=now&seconds=1"
+SFTPRES = "/analytics/v1/datasets/sftp.kilobytes/data?start=now&seconds=1"
+FTPRES = "/analytics/v1/datasets/ftp.kilobytes/data?start=now&seconds=1"
 
 ###############################################################################
 # Limit Max Warnings and Limit Max Error values.
@@ -86,6 +88,9 @@ MAXWARNSMB, MAXERRORSMB = 40000, 80000
 MAXWARNSMB2, MAXERRORSMB2 = 40000, 80000
 MAXWARNNIC, MAXERRORNIC = 500000, 1000000
 MINWARNARC, MINERRORARC = 80, 60
+MAXWARNHTTP, MAXERRORHTTP = 6000, 10000
+MAXWARNSFTP, MAXERRORSFTP = 200000, 300000
+MAXWARNFTP, MAXERRORFTP = 200000, 300000
 
 
 ###############################################################################
@@ -93,6 +98,7 @@ MINWARNARC, MINERRORARC = 80, 60
 ###############################################################################
 class AdvancedCustomSensorResult(CustomSensorResult):
     """Extend CustomSensorResult to include additional parameters"""
+
     def add_channel(
             self,
             channel_name,
@@ -145,7 +151,8 @@ class AdvancedCustomSensorResult(CustomSensorResult):
 
         valid_unit = {
             "Ops/sec",
-            "Kilobytes/sec"
+            "Kilobytes/sec",
+            "Request/sec"
         }
 
         if unit in valid_unit:
@@ -445,6 +452,84 @@ def arc():
             channels.sensor_message += "| can't check ARC |"
 
 
+def http():
+    try:
+        req = requests.get(URL + HTTPRES,
+                           auth=ZAUTH,
+                           verify=False,
+                           headers=HEADER,
+                           timeout=TIMEOUT)
+        j = json.loads(req.text)
+        req.close()
+        for data in j.values():
+            channels.add_channel(channel_name="HTTP",
+                                 value=data["data"]["value"],
+                                 is_float=False,
+                                 limit_max_warning=MAXWARNHTTP,
+                                 limit_max_error=MAXERRORHTTP,
+                                 is_limit_mode=1,
+                                 unit="Custom",
+                                 custom_unit="Request/sec"
+                                 )
+    except Exception:
+        if channels.sensor_message == "OK":
+            channels.sensor_message = "| can't check HTTP |"
+        else:
+            channels.sensor_message += "| can't check HTTP |"
+
+
+def sftp():
+    try:
+        req = requests.get(URL + SFTPRES,
+                           auth=ZAUTH,
+                           verify=False,
+                           headers=HEADER,
+                           timeout=TIMEOUT)
+        j = json.loads(req.text)
+        req.close()
+        for data in j.values():
+            channels.add_channel(channel_name="SFTP",
+                                 value=data["data"]["value"],
+                                 is_float=False,
+                                 limit_max_warning=MAXWARNSFTP,
+                                 limit_max_error=MAXERRORSFTP,
+                                 is_limit_mode=1,
+                                 unit="Custom",
+                                 custom_unit="Kilobytes/sec"
+                                 )
+    except Exception:
+        if channels.sensor_message == "OK":
+            channels.sensor_message = "| can't check SFTP |"
+        else:
+            channels.sensor_message += "| can't check SFTP |"
+
+
+def ftp():
+    try:
+        req = requests.get(URL + FTPRES,
+                           auth=ZAUTH,
+                           verify=False,
+                           headers=HEADER,
+                           timeout=TIMEOUT)
+        j = json.loads(req.text)
+        req.close()
+        for data in j.values():
+            channels.add_channel(channel_name="FTP",
+                                 value=data["data"]["value"],
+                                 is_float=False,
+                                 limit_max_warning=MAXWARNFTP,
+                                 limit_max_error=MAXERRORFTP,
+                                 is_limit_mode=1,
+                                 unit="Custom",
+                                 custom_unit="Kilobytes/sec"
+                                 )
+    except Exception:
+        if channels.sensor_message == "OK":
+            channels.sensor_message = "| can't check FTP |"
+        else:
+            channels.sensor_message += "| can't check FTP |"
+
+
 ###############################################################################
 # Default list of enabled checks to run
 ###############################################################################
@@ -459,7 +544,10 @@ ENABLEDCHECKS = {
     "smb": smb,
     "smb2": smb2,
     "nic": nic,
-    "arc": arc
+    "arc": arc,
+    "http": http,
+    "sftp": sftp,
+    "ftp": ftp
 }
 
 

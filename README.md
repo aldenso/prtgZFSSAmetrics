@@ -26,7 +26,7 @@ In **Additional Parameters** tab, use some pattern like the next examples:
 ### Notes
 
 * You need a ZFSSA user with enough privileges to get data from datasets.
-* The Rest service must be enable in the ZFSSA.
+* The Rest service must be enabled in the ZFSSA.
 * Be careful about the number of metrics to retrieve and the time it takes (frequency shouldn't be so aggressive).
 * You need Administrator privileges in the PRTG server to copy the scripts, install pip and the packages with pip.
 
@@ -44,3 +44,6 @@ In **Additional Parameters** tab, use some pattern like the next examples:
 * smb2:smb2.ops
 * nic:nic.kilobytes
 * arc:arc.hitratio
+* http:http.reqs
+* sftp:sftp.kilobytes
+* ftp:ftp.kilobytes
