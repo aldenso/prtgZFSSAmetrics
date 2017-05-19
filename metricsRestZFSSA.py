@@ -155,10 +155,7 @@ class AdvancedCustomSensorResult(CustomSensorResult):
             "Request/sec"
         }
 
-        if unit in valid_unit:
-            return True
-        else:
-            return False
+        return bool(unit in valid_unit)
 
 
 ###############################################################################
@@ -184,8 +181,7 @@ def cpu():
                                  limit_max_warning=MAXWARNCPU,
                                  limit_max_error=MAXERRORCPU,
                                  is_limit_mode=1,
-                                 primary_channel=True
-                                 )
+                                 primary_channel=True)
     except Exception:
         if channels.sensor_message == "OK":
             channels.sensor_message = "| can't check cpu |"
@@ -210,8 +206,7 @@ def nfs2():
                                  limit_max_warning=MAXWARNNFS2,
                                  limit_max_error=MAXERRORNFS2,
                                  is_limit_mode=1,
-                                 custom_unit="Ops/sec"
-                                 )
+                                 custom_unit="Ops/sec")
     except Exception:
         if channels.sensor_message == "OK":
             channels.sensor_message = "| can't check nfs2 |"
@@ -236,8 +231,7 @@ def nfs3():
                                  limit_max_warning=MAXWARNNFS3,
                                  limit_max_error=MAXERRORNFS3,
                                  is_limit_mode=1,
-                                 custom_unit="Ops/sec"
-                                 )
+                                 custom_unit="Ops/sec")
     except Exception:
         if channels.sensor_message == "OK":
             channels.sensor_message = "| can't check nfs3 |"
@@ -262,8 +256,7 @@ def nfs4():
                                  limit_max_warning=MAXWARNNFS4,
                                  limit_max_error=MAXERRORNFS4,
                                  is_limit_mode=1,
-                                 custom_unit="Ops/sec"
-                                 )
+                                 custom_unit="Ops/sec")
     except Exception:
         if channels.sensor_message == "OK":
             channels.sensor_message = "| can't check nfs4 |"
@@ -288,8 +281,7 @@ def disk():
                                  limit_max_warning=MAXWARNDISK,
                                  limit_max_error=MAXERRORDISK,
                                  is_limit_mode=1,
-                                 custom_unit="Ops/sec"
-                                 )
+                                 custom_unit="Ops/sec")
     except Exception:
         if channels.sensor_message == "OK":
             channels.sensor_message = "| can't check disk |"
@@ -314,8 +306,7 @@ def fc():
                                  limit_max_warning=MAXWARNFC,
                                  limit_max_error=MAXERRORFC,
                                  is_limit_mode=1,
-                                 custom_unit="Ops/sec"
-                                 )
+                                 custom_unit="Ops/sec")
     except Exception:
         if channels.sensor_message == "OK":
             channels.sensor_message = "| can't check fc |"
@@ -340,8 +331,7 @@ def iscsi():
                                  limit_max_warning=MAXWARNISCSI,
                                  limit_max_error=MAXERRORISCSI,
                                  is_limit_mode=1,
-                                 custom_unit="Ops/sec"
-                                 )
+                                 custom_unit="Ops/sec")
     except Exception:
         if channels.sensor_message == "OK":
             channels.sensor_message = "| can't check iscsi |"
@@ -366,8 +356,7 @@ def smb():
                                  limit_max_warning=MAXWARNSMB,
                                  limit_max_error=MAXERRORSMB,
                                  is_limit_mode=1,
-                                 custom_unit="Ops/sec"
-                                 )
+                                 custom_unit="Ops/sec")
     except Exception:
         if channels.sensor_message == "OK":
             channels.sensor_message = "| can't check smb |"
@@ -392,8 +381,7 @@ def smb2():
                                  limit_max_warning=MAXWARNSMB2,
                                  limit_max_error=MAXERRORSMB2,
                                  is_limit_mode=1,
-                                 custom_unit="Ops/sec"
-                                 )
+                                 custom_unit="Ops/sec")
     except Exception:
         if channels.sensor_message == "OK":
             channels.sensor_message = "| can't check smb2 |"
@@ -418,8 +406,7 @@ def nic():
                                  limit_max_warning=MAXWARNNIC,
                                  limit_max_error=MAXERRORNIC,
                                  is_limit_mode=1,
-                                 custom_unit="Kilobytes/sec"
-                                 )
+                                 custom_unit="Kilobytes/sec")
     except Exception:
         if channels.sensor_message == "OK":
             channels.sensor_message = "| can't check nic |"
@@ -443,8 +430,7 @@ def arc():
                                  limit_min_warning=MINWARNARC,
                                  limit_min_error=MINERRORARC,
                                  is_limit_mode=1,
-                                 unit="Percent"
-                                 )
+                                 unit="Percent")
     except Exception:
         if channels.sensor_message == "OK":
             channels.sensor_message = "| can't check ARC |"
@@ -469,8 +455,7 @@ def http():
                                  limit_max_error=MAXERRORHTTP,
                                  is_limit_mode=1,
                                  unit="Custom",
-                                 custom_unit="Request/sec"
-                                 )
+                                 custom_unit="Request/sec")
     except Exception:
         if channels.sensor_message == "OK":
             channels.sensor_message = "| can't check HTTP |"
@@ -495,8 +480,7 @@ def sftp():
                                  limit_max_error=MAXERRORSFTP,
                                  is_limit_mode=1,
                                  unit="Custom",
-                                 custom_unit="Kilobytes/sec"
-                                 )
+                                 custom_unit="Kilobytes/sec")
     except Exception:
         if channels.sensor_message == "OK":
             channels.sensor_message = "| can't check SFTP |"
@@ -521,8 +505,7 @@ def ftp():
                                  limit_max_error=MAXERRORFTP,
                                  is_limit_mode=1,
                                  unit="Custom",
-                                 custom_unit="Kilobytes/sec"
-                                 )
+                                 custom_unit="Kilobytes/sec")
     except Exception:
         if channels.sensor_message == "OK":
             channels.sensor_message = "| can't check FTP |"
@@ -555,12 +538,12 @@ ENABLEDCHECKS = {
 # MAIN Function
 ###############################################################################
 def main():
-    if len(INCLUDECHECKS) != 0 and len(EXCLUDECHECKS) != 0:
+    if INCLUDECHECKS and EXCLUDECHECKS:
         channels.add_error("Sensor failed: can't use include and exclude")
-    elif len(INCLUDECHECKS) != 0:
+    elif INCLUDECHECKS:
         for check in INCLUDECHECKS:
             ENABLEDCHECKS[check]()
-    elif len(EXCLUDECHECKS) != 0:
+    elif EXCLUDECHECKS:
         for check in EXCLUDECHECKS:
             del ENABLEDCHECKS[check]
         for check in ENABLEDCHECKS:
@@ -568,7 +551,7 @@ def main():
     else:
         for check in ENABLEDCHECKS:
             ENABLEDCHECKS[check]()
-    if len(channels.channels) == 0:
+    if not channels.channels:
         channels.add_error("No channels can be retrieved")
     print(channels.get_json_result())
 
