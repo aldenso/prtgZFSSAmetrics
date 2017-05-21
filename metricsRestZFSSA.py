@@ -52,6 +52,8 @@ for opt, arg in opts:
     elif opt in ("-i", "--include"):
         INCLUDECHECKS = arg.split(",")
 
+PRTGTIMEOUT = int(prtgparams["timeout"])
+
 ###############################################################################
 # constants
 ###############################################################################
@@ -538,17 +540,21 @@ ENABLEDCHECKS = {
 # MAIN Function
 ###############################################################################
 def main():
+    global TIMEOUT
     if INCLUDECHECKS and EXCLUDECHECKS:
         channels.add_error("Sensor failed: can't use include and exclude")
     elif INCLUDECHECKS:
+        TIMEOUT = int(PRTGTIMEOUT / len(INCLUDECHECKS))
         for check in INCLUDECHECKS:
             ENABLEDCHECKS[check]()
     elif EXCLUDECHECKS:
         for check in EXCLUDECHECKS:
             del ENABLEDCHECKS[check]
+        TIMEOUT = int(PRTGTIMEOUT / len(ENABLEDCHECKS))
         for check in ENABLEDCHECKS:
             ENABLEDCHECKS[check]()
     else:
+        TIMEOUT = int(PRTGTIMEOUT / len(ENABLEDCHECKS))
         for check in ENABLEDCHECKS:
             ENABLEDCHECKS[check]()
     if not channels.channels:
