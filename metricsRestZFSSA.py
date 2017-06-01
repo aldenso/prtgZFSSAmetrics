@@ -14,7 +14,8 @@ import sys
 import json
 import getopt
 import requests
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
+# from requests.packages.urllib3.exceptions import InsecureRequestWarning  # for older requests
+from urllib3.exceptions import InsecureRequestWarning  # for newer requests
 from paepy.ChannelDefinition import CustomSensorResult
 
 # to disable warning
@@ -70,6 +71,7 @@ FCRES = "/analytics/v1/datasets/fc.ops/data?start=now&seconds=1"
 ISCSIRES = "/analytics/v1/datasets/iscsi.ops/data?start=now&seconds=1"
 SMBRES = "/analytics/v1/datasets/smb.ops/data?start=now&seconds=1"
 SMB2RES = "/analytics/v1/datasets/smb2.ops/data?start=now&seconds=1"
+SMB3RES = "/analytics/v1/datasets/smb3.ops/data?start=now&seconds=1"
 NICRES = "/analytics/v1/datasets/nic.kilobytes/data?start=now&seconds=1"
 ARCRES = "/analytics/v1/datasets/arc.hitratio/data?start=now&seconds=1"
 HTTPRES = "/analytics/v1/datasets/http.reqs/data?start=now&seconds=1"
@@ -88,6 +90,7 @@ MAXWARNFC, MAXERRORFC = 6000, 8000
 MAXWARNISCSI, MAXERRORISCSI = 6000, 8000
 MAXWARNSMB, MAXERRORSMB = 40000, 80000
 MAXWARNSMB2, MAXERRORSMB2 = 40000, 80000
+MAXWARNSMB3, MAXERRORSMB3 = 40000, 80000
 MAXWARNNIC, MAXERRORNIC = 500000, 1000000
 MINWARNARC, MINERRORARC = 80, 60
 MAXWARNHTTP, MAXERRORHTTP = 6000, 10000
@@ -391,6 +394,31 @@ def smb2():
             channels.sensor_message += "| can't check smb2 |"
 
 
+def smb3():
+    try:
+        req = requests.get(URL + SMB3RES,
+                           auth=ZAUTH,
+                           verify=False,
+                           headers=HEADER,
+                           timeout=TIMEOUT)
+        j = json.loads(req.text)
+        req.close()
+        for data in j.values():
+            channels.add_channel(channel_name="SMB3",
+                                 value=data["data"]["value"],
+                                 is_float=False,
+                                 unit="Custom",
+                                 limit_max_warning=MAXWARNSMB3,
+                                 limit_max_error=MAXERRORSMB3,
+                                 is_limit_mode=1,
+                                 custom_unit="Ops/sec")
+    except Exception:
+        if channels.sensor_message == "OK":
+            channels.sensor_message = "| can't check smb3 |"
+        else:
+            channels.sensor_message += "| can't check smb3 |"
+
+
 def nic():
     try:
         req = requests.get(URL + NICRES,
@@ -528,6 +556,7 @@ ENABLEDCHECKS = {
     "iscsi": iscsi,
     "smb": smb,
     "smb2": smb2,
+    "smb3": smb3,
     "nic": nic,
     "arc": arc,
     "http": http,

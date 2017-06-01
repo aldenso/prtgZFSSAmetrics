@@ -42,6 +42,7 @@ In **Additional Parameters** tab, use some pattern like the next examples:
 * iscsi:iscsi.ops
 * smb:smb.ops
 * smb2:smb2.ops
+* smb3:smb3.ops
 * nic:nic.kilobytes
 * arc:arc.hitratio
 * http:http.reqs
